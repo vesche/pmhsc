@@ -1,8 +1,8 @@
 # pmhsc - Poor Man's Homophonic Substitution Cipher
 
-This is a Python implementation of a [homophonic substitution cipher](https://en.wikipedia.org/wiki/Substitution_cipher#Homophonic_substitution). Upon generating a `mapping.p` file, pmhsc takes 10 random, non-repeating letters and gathers all the permutations of those letters (10! or 3,628,800 unique strings). These permutations are then shuffled, and dispersed equally between the 26 letters of the alphabet. This gives each letter of the alphabet 139,569 mappings. When a message is encrypted one of these 139,569 strings belonging to each letter are selected at random to represent each character. During decryption strings are searched for and remapped to their original letters.
+This is a Python implementation of a [homophonic substitution cipher](https://en.wikipedia.org/wiki/Substitution_cipher#Homophonic_substitution). Upon generating a `mapping.p` file, pmhsc takes 7 random, non-repeating letters and space (for confusion) and gathers all the permutations with repetitions (cartesian product) of those letters (8^8 or 16,777,216 unique strings). These permutations are then shuffled, and dispersed equally 27 ways (26 letters of the alphabet and space). This gives each letter 621,378 unique mappings. When a message is encrypted one of these 621,378 strings belonging to each letter are selected at random to represent each character. During decryption strings are searched for and remapped to their original letters.
 
-Seeing as we still cannot break some homophonic substitution ciphers from the eighteen hundreds that were comprised of 50,000 symbols or less, I'm fairly certain that this cipher can be used to safely talk about nerdy, unimportant things. Swap `mapping.p` files with your homies face-to-face, and then send each other all the secret messages. <3
+Seeing as we still cannot break some homophonic substitution ciphers from the eighteen hundreds that were comprised of 50,000 symbols or less, I'm fairly certain that this cipher can be used to very safely share short, important, nerdy messages. Swap `mapping.p` files with your homies face-to-face, and then send each other all the secret messages. <3
 
 ## Usage
 ```
@@ -24,16 +24,16 @@ optional arguments:
                         output file
 
 $ python pmhsc.py --genmaps
-Mapping completed in 5.55 seconds.
+Mapping completed in 85.75 seconds.
 
 $ du -sh mapping.p
-70M	mapping.p
+358M	mapping.p
 
 $ python pmhsc.py --encrypt -i example/example.txt -o example/example.enc
-Encryption completed in 0.33 seconds.
+Encryption completed in 41.94 seconds.
 
 $ python pmhsc.py --decrypt -i example/example.enc -o example/example.dec
-Decryption completed in 25.95 seconds
+Decryption completed in 161.18 seconds.
 ```
 
 ## Results
@@ -47,10 +47,10 @@ old clothes of Dudley's, and Dudley was about four times bigger than he
 ...
 
 $ cat example.enc
-qntviodxwgwtvqdnxoginvowdxgqtiviwonqxgdtitwxgnoqdvxvqoiwtgndtwdqionxvg nxiqtvodgwdgqotnwvxi wgdxiotqnvgodxtwnvqigtoqxinwdv
-dtviowngxqtdiqxgvnowqgtvwxndiotoqwgxnvdiixnotwdvqgwxtgndvioqndxvqowtgiqgwxodnvtitgdnoqivwx gxwtvoidnqgiqtvonwdx
-qxvnitodgwxgoqdntwiv igvdnxtowqnxvqotdgwidgwxvnitqodqvontixwg nqtigvxodwovwngiqxtdvdtoiwgqxngvtxqwodniqgwvdnxitotgdqixwonv
-xwtdonqvgixodqngviwt oxigvtqdwn qntdoxivgwiogqdvxtwnqgxdnvtiwondwqvgtoix
+b kbkk rrkdknrkvrqkbvd bdnkq nr nqrvbvrbbvkvknbqb nbd nvvd  dkrqvrvvqrddqrvrdd
+rqnqnvvnbdk rbvvkdqdb bvvnrqbvr vkqrvrbvqvq dbndknqndq rrvdbrqdb vkrkkrvvqdvdkb
+n bkqkrk kqkkq qvqqvbdd q rqd bdv vv r rqvvd qdndrd k vbnkdk vqkkqkvqndnnnbnbrkr
+drbrkv kbbr dqndqnbnnqr kdqbvqqbvdkdnd dkdr  kkrnnkbqdnbv kkk qkbn  qddrdnbnqb
 ...
 
 $ cat example.dec

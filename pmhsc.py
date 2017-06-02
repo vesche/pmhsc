@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #
-# pmhsc - poor mans homophonic substitution cipher
+# pmhsc - poor man's homophonic substitution cipher
 # https://github.com/vesche/pmhsc
 #
 
@@ -12,24 +12,27 @@ import random
 import sys
 import time
 
-from itertools import permutations
+from itertools import product
 from string import ascii_lowercase
+
+
+CHARS = ascii_lowercase + ' '
 
 
 def generate_maps():
     start_time = time.time()
 
-    # get 10 random non-repeating letters
-    letters = random.sample(ascii_lowercase, 10)
+    # get 7 random non-repeating letters and space
+    letters = random.sample(CHARS, 7) + ' '
 
-    # get the 3,628,800 permutations and shuffle them
-    perms = [''.join(_) for _ in permutations(letters)]
+    # get the 16,777,216 permutations with repetitions and shuffle them
+    perms = [''.join(_) for _ in product(letters, repeat=8)]
     random.shuffle(perms)
 
     perm_dict = {}
-    for l in ascii_lowercase:
-        l_index = ascii_lowercase.index(l)
-        perm_dict[l] = perms[139569*l_index:139569*(l_index+1)]
+    for l in CHARS:
+        l_index = CHARS.index(l)
+        perm_dict[l] = perms[621378*l_index:621378*(l_index+1)]
 
     with open('mapping.p', 'wb') as f:
         pickle.dump(perm_dict, f)
@@ -64,9 +67,7 @@ def encrypt(map_file, input_file, output_file):
 
     with open(output_file, 'w') as f:
         for i in plaintext:
-            if i == ' ':
-                f.write(' ')
-            elif i.isalpha():
+            if i.isalpha() or (i == ' '):
                 i = i.lower()
                 f.write(random.choice(mapping[i]))
 
@@ -87,24 +88,21 @@ def decrypt(map_file, input_file, output_file):
                     return k
 
     with open(input_file) as f:
-        ciphertext = f.read().split()
+        ciphertext = f.read()
 
-    plaintext = []
-    for i in ciphertext:
-        dec_word = ''
-        enc_letters = [i[x:x+10] for x in range(0, len(i), 10)]
-        for j in enc_letters:
-            dec_word += search_mapping(j)
-        plaintext.append(dec_word)
+    plaintext = ''
+    enc_letters = [ciphertext[x:x+8] for x in range(0, len(ciphertext), 8)]
+    for l in enc_letters:
+        plaintext += search_mapping(l)
 
     with open(output_file, 'w') as f:
-        f.write(' '.join(plaintext)+'\n')
+        f.write(plaintext+'\n')
 
     print('Decryption completed in {0:.2f} seconds.'.format(time.time() - start_time))
 
 
 def get_parser():
-    parser = argparse.ArgumentParser(description='poor mans homophonic substitution cipher')
+    parser = argparse.ArgumentParser(description='poor man\'s homophonic substitution cipher')
     parser.add_argument('-g', '--genmaps',
                         help='generate mapping file', action='store_true')
     parser.add_argument('-e', '--encrypt',
