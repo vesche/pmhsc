@@ -23,7 +23,7 @@ def generate_maps():
     start_time = time.time()
 
     # get 7 random non-repeating letters and space
-    letters = random.sample(CHARS, 7) + ' '
+    letters = random.sample(CHARS, 8)
 
     # get the 16,777,216 permutations with repetitions and shuffle them
     perms = [''.join(_) for _ in product(letters, repeat=8)]
